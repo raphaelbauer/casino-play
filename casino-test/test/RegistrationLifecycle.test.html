@@ -1,0 +1,71 @@
+////////////////////////////////////////////////////////////////////////////////
+// Tests:
+// - login / logout
+// - registration of new user with subseauent login
+// - password forgotten function
+// => is tested on one domain (functionality of signing two domains is not tested)
+#{sienaFixture delete:'all'/}
+
+#{selenium 'Test Registration Lost Password And Login Lifecycle'}
+
+    //test registration
+    clearSession()
+    
+    open('http://localhost:9000/secure')
+    assertTextPresent('Login')
+    
+    open('http://localhost:9000/registration')
+    assertTextPresent('Register')
+    //enter invalid email:
+    type('email', 'test')
+    type('password', 'test')
+    type('confirm', 'test')
+    clickAndWait('submit')   
+    
+    //expect that error is shown
+    assertTextPresent('Error')  
+    
+    //now we are entering a correct email and it should work:
+    type('email', 'test@test.com')
+    type('password', 'test')
+    type('confirm', 'test')
+    clickAndWait('submit')
+    
+    
+    //check that email was sent to test@test.com
+    storeLastReceivedEmailBy('test@test.com', 'email')
+    store('javascript{/http:[^\s]+/.exec(storedVars["email"])[0]}', 'confirmationUrl')
+    open($[confirmationUrl])
+    assertTextPresent('Registration successful :)')  
+       
+    //Oops. Now the user lost the password.
+    clearSession()
+    open('http://localhost:9000/registration/lostpassword')
+    type('email', 'test@test.com')
+    clickAndWait('submit')
+    
+    //okay check that there is a confirmation message
+    storeLastReceivedEmailBy('test@test.com', 'email')
+    store('javascript{/http:[^\s]+/.exec(storedVars["email"])[0]}', 'confirmationUrl')
+    
+    //cool. open the link url
+    open($[confirmationUrl])
+    //and enter a new password
+    type('password', 'newpassword')
+    type('passwordConfirm', 'newpassword')
+    clickAndWait('submit')
+    
+    //and check that there is success setting the pw :)
+    assertTextPresent('jupp')
+
+    
+    //and now log in with new password:
+    clearSession()
+    open('/login')
+    type('username', 'test@test.com')
+    type('password', 'newpassword')
+    clickAndWait('signin')
+
+    assertTextPresent('Welcome')
+
+#{/selenium}

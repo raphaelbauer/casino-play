@@ -1,0 +1,26 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                                       Application.index
+
+# Ignore favicon requests
+GET     /favicon.ico                            404
+
+# Map static resources from the /app/public folder to the /public path
+GET     /public/                                staticDir:public
+
+#simulating protected content:
+GET     /secure                                   SecureController.index
+
+GET     /secure/admin_only                       SecureController.adminOnly  
+GET     /secure/superadmin_only                  SecureController.superadminOnly
+
+*       /                                       module:casino
+
+*       /admin                                  module:crudsiena
+
+
+# Catch all
+*       /{controller}/{action}                  {controller}.{action}
