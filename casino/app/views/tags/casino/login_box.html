@@ -1,0 +1,57 @@
+*{
+ *  A simple login box.
+ *  (can be moved to playsienauser...)
+ *
+ *  Login box automatically posts to secure sciplanet when
+ *  parameter playsienauser.secureUrl is set...
+ *
+}*
+
+%{
+    
+    _secure_prefix = play.configuration.getProperty("casino.secureUrl", "");
+
+}%
+
+<div class="login_box">
+
+<form action="${_secure_prefix}/login" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
+        
+        #{if flash.error}
+            <p class="error">
+                &{flash.error}
+            </p>
+        #{/if}
+        #{if flash.success}
+            <p class="success">
+                &{flash.success}
+            </p>
+        #{/if}
+    
+       
+        <label for="username" class="username-field">
+            <strong class="username-label">&{'secure.username'}</strong>
+            <input type="text" name="username" id="username" value="${flash.username}" />
+        </label>
+      
+   
+        <label for="password" class="password-field">
+            <strong class="password-label">&{'secure.password'}</strong>
+            <input type="password" name="password" id="password" value="" />
+        </label>
+       
+        <p id="remember-field">
+            <input type="checkbox" name="remember" id="remember" value="true" ${flash.remember ? 'checked="true"' : ''} />
+            <label for="remember">&{'secure.remember'}</label>
+        </p>
+       
+            <input type="submit" id="signin" class="login_button" value="&{'secure.signin'}" />
+            
+        <div class="right">
+            <a href="@{casino.Registration.registration()}">&{'login.register.new.user'}</a>
+        </div>
+       
+    </form>
+    
+    
+    </div>
