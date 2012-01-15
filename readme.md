@@ -1,4 +1,4 @@
-![RestyGWT](http://restygwt.fusesource.org/images/restygwt-logo.png)
+Casino!
 ==============
 
 Description
