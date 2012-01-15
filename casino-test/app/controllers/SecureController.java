@@ -2,25 +2,25 @@ package controllers;
 
 import play.mvc.Controller;
 import play.mvc.With;
-import controllers.casino.CasinoCheck;
-import controllers.casino.SecureCasino;
+import controllers.casino.Check;
+import controllers.casino.Secure;
 
-//make sure controller only works when authentificated
+//make sure controller only works when authenticated
 
-@With(SecureCasino.class)
+@With(Secure.class)
 public class SecureController extends Controller {
 
-    @CasinoCheck("isConnected")
+	@Check("isConnected")
     public static void index() {
         render();
     }
 
-    @CasinoCheck("role:admin")
+	@Check("role:admin")
     public static void adminOnly() {
         render();
     }
     
-    @CasinoCheck("role:superadmin")
+	@Check("role:superadmin")
     public static void superadminOnly() {
         render();
     }

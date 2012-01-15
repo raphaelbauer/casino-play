@@ -1,13 +1,11 @@
-import java.net.MalformedURLException;
-
 import org.junit.Test;
 
-import play.Play;
-import play.mvc.Http;
-import play.mvc.Http.Response;
-import play.test.FunctionalTest;
+import controllers.casino.BaseFunctionalTest;
 
-public class ApplicationTest extends FunctionalTest {
+import play.Play;
+import play.mvc.Http.Response;
+
+public class ApplicationTest extends BaseFunctionalTest {
 
 
 	@Test

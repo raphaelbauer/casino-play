@@ -17,7 +17,7 @@ import play.utils.Java;
  * @author ra
  *
  */
-public class SecurityCasino extends SecureCasino.Security {
+public class Security extends Secure.Security {
 
         /**
          * @Deprecated
@@ -75,7 +75,7 @@ public class SecurityCasino extends SecureCasino.Security {
         	
         	// Possibility 1: Make sure is connected
         	if ("isConnected".equals(check)) {
-        		return SecurityCasino.isConnected();   		
+        		return Security.isConnected();   		
         	}
         	
         	
@@ -83,7 +83,7 @@ public class SecurityCasino extends SecureCasino.Security {
         	if (check.startsWith("role:")) {
         		
         		
-        		String email = SecurityCasino.connected();
+        		String email = Security.connected();
         		//if user is not logged in role checking does not make sense...
         		if (email == null) {
         			return false;
@@ -220,9 +220,9 @@ public class SecurityCasino extends SecureCasino.Security {
 
         private static Object invoke(String m, Object... args) throws Throwable {
             Class security = null;
-            List<Class> classes = Play.classloader.getAssignableClasses(SecurityCasino.class);
+            List<Class> classes = Play.classloader.getAssignableClasses(Security.class);
             if(classes.size() == 0) {
-                security = SecurityCasino.class;
+                security = Security.class;
             } else {
                 security = classes.get(0);
             }

@@ -1,6 +1,6 @@
-GET         /login                                     casino.SecureCasino.login
-POST        /login                                     casino.SecureCasino.authenticate
-GET         /logout                                    casino.SecureCasino.logout
+GET         /login                                     casino.Secure.login
+POST        /login                                     casino.Secure.authenticate
+GET         /logout                                    casino.Secure.logout
 
 GET         /login/auth_via_token                      casino.SessionTransfer.loginViaToken
 GET         /logout/auth_via_token                     casino.SessionTransfer.logoutViaToken

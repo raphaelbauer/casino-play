@@ -1,13 +1,22 @@
 package models.casino;
 import models.casino.User;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import play.modules.siena.SienaFixtures;
 import play.test.UnitTest;
 
 
 public class UserTest extends UnitTest {
 
+	@Before
+	public void doInit() {
+		
+		SienaFixtures.deleteAllModels();
+		
+		
+	}
 	
 	@Test
 	public void testUserModel() {

@@ -22,8 +22,7 @@ import play.utils.Java;
  *
  */
 @With(TransportUriGuarantee.class)
-//done making it secure ;)
-public class SecureCasino extends Controller {
+public class Secure extends Controller {
 
     @Before(unless={"login", "authenticate", "logout"})
     static void checkAccess() throws Throwable {
@@ -33,17 +32,17 @@ public class SecureCasino extends Controller {
             login();
         }
         // Checks
-        CasinoCheck check = getActionAnnotation(CasinoCheck.class);
+        Check check = getActionAnnotation(Check.class);
         if(check != null) {
             check(check);
         }
-        check = getControllerInheritedAnnotation(CasinoCheck.class);
+        check = getControllerInheritedAnnotation(Check.class);
         if(check != null) {
             check(check);
         }
     }
 
-    private static void check(CasinoCheck check) throws Throwable {
+    private static void check(Check check) throws Throwable {
         for(String profile : check.value()) {
             boolean hasProfile = (Boolean)Security.invoke("check", profile);
             if(!hasProfile) {

@@ -32,6 +32,8 @@ public class User extends EnhancedModel {
 	 * You can use your own roles in your domain.
 	 * 
 	 * Examples would be: admin or superadmin
+	 * 
+	 * Siena saves roles as embeded Json
 	 */
 	@Embedded
 	private List<String> roles;
