@@ -1,4 +1,4 @@
-![Casino](https://github.com/reyez/casino-play/blob/master/casino-logo.png)
+![Casino](https://github.com/reyez/casino-play/blob/master/casino-logo.png?raw=true)
 ==============
 
 Description
