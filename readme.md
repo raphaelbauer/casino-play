@@ -32,8 +32,8 @@ The cool thing is that it is based on play's security concept. So we don't re-in
 * check out test config at: https://github.com/reyez/casino-play/blob/master/casino-test/conf/application.conf
 
 # More getting started
-* General lifecycle: casino-test/test/!RegistrationLifecycle.html
-* General configuration: casino-test/conf/application.conf
+* General lifecycle: https://github.com/reyez/casino-play/blob/master/casino-test/test/RegistrationLifecycle.test.html
+* General configuration: https://github.com/reyez/casino-play/blob/master/casino-test/conf
 
 # Examples
 * yourapp.com/registration => signup new users including email verification
@@ -43,7 +43,7 @@ The cool thing is that it is based on play's security concept. So we don't re-in
 * yourapp.com/login
 * yourapp.com/logout
 
-# Details
+# Implementation details
 * Uses siena for persistence of the user object 
 * Uses bcrypt to hash password (should be safe in the next years)
 * Uses re-captcha to block bots from using your stuff
