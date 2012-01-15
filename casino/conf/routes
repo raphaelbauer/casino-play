@@ -1,0 +1,18 @@
+GET         /login                                     casino.SecureCasino.login
+POST        /login                                     casino.SecureCasino.authenticate
+GET         /logout                                    casino.SecureCasino.logout
+
+GET         /login/auth_via_token                      casino.SessionTransfer.loginViaToken
+GET         /logout/auth_via_token                     casino.SessionTransfer.logoutViaToken
+
+GET         /registration                              casino.Registration.registration
+POST        /registration/finish                       casino.Registration.registrationFinish
+GET         /registration/pending                      casino.Registration.pending
+GET         /registration/confirm/{code}               casino.Registration.confirm
+
+GET         /registration/lostpassword                 casino.Registration.lostPassword
+POST        /registration/lostpassword/finish          casino.Registration.lostPasswordFinish
+GET         /registration/lostpassword/pending         casino.Registration.lostPasswordEmailSentCheckInbox
+GET         /registration/lostpassword/confirm/{code}  casino.Registration.lostPasswordNewPassword
+POST        /registration/lostpassword/confirm/finish  casino.Registration.lostPasswordNewPasswordFinish
+ 

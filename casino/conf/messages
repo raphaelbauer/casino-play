@@ -1,0 +1,34 @@
+# Signup
+registration.register_title=Register
+registration.email=Email
+registration.password=Password
+registration.confirm=Password
+registration.register=Go!
+
+# Signup success => check email
+registration.please_verify_email_address=Confirmation email sent. Please check your inbox :)
+
+# Signup email confirmation text:
+registration.confirmation.greeting=Hi
+registration.confirmation.body=Please click on link to confirm your registration:
+
+# Signup confirm email
+registration.error=Error.
+registration.registration_success=Registration successful :)
+
+# Password recovery
+# login page
+secure.title=Login
+login.register.new.user=Register new user
+
+# Password recovery email text:
+registration.lostpassword.email.greeting=Hi
+registration.lostpassword.email.body=Please click on link to recover your password:
+
+secure.title=Login
+secure.username=Username:
+secure.password=Password:
+secure.remember=Remember me
+secure.signin=Sign in
+secure.error=Oops, unknown username or password.
+secure.logout=You have been logged out.
