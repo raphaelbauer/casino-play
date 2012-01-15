@@ -1,0 +1,65 @@
+html, body {
+    background: #F0F0F0;
+    font-family: 'Lucida grande', verdana, sans-serif;
+}
+
+#reg {
+    width: 600px;
+    margin: 50px auto;
+    text-align: center;
+}
+
+#reg h1 {
+    font-weight: bold;
+    color: #111;
+}
+
+#reg form {
+    border: 10px solid #ccc;
+    background: #fff;
+    padding: 10px;
+    text-align: left;
+}
+
+#reg ul {
+    list-style-type: none;
+}
+
+#reg label {
+    width: 100px;
+    float: left;
+    text-align: right;
+    margin-right: 5px;
+    color: #333;
+    font-size: 15px;
+}
+
+#reg input[type=text], #reg input[type=password] {
+    width: 200px;
+    font-size: 13px;
+}
+
+#reg input[type=submit] {
+    margin-left: 210px;
+    width: 100px;
+}
+
+#reg li {
+    margin-top: 10px;
+}
+
+#reg .error, #reg .success  {
+    color: #fff;
+    font-size: 12px;
+    text-align: center;
+    margin-bottom: 10px;
+    padding: 5px;
+}
+
+#reg .error {
+    background: #c00 !important;
+}
+
+#reg .success {
+    background: #008800 !important;
+}
