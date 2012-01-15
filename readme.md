@@ -1,4 +1,6 @@
 ![Casino](https://github.com/reyez/casino-play/blob/master/casino-logo.png?raw=true)
+
+Casino! - user management for Play! framework
 ==============
 
 Description
