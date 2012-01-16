@@ -26,8 +26,11 @@ public class SessionTransfer extends Controller {
 		
 	}
 	
-	public static void loginViaToken(String token, String url) {
+	public static void loginViaToken(String token) {
 
+		// set session on second server / url
+		// most likely you 'll come from https://myserver.com and 
+		// set the session at http://myserver.com
 		String username = Cache.get(PREFIX + token, String.class);
 		Cache.delete(PREFIX + token);
 
@@ -36,12 +39,19 @@ public class SessionTransfer extends Controller {
 		} else {
 			forbidden();
 		}
+		
+		// now as we are at the first server (where the request most likely started)
+		// we check the flash cookie and redirect to the url that was set before
+		String url = flash.get("url");
+		if (url == null) {
+			url = "/";
+		}
 
 		redirect(url);
 
 	}
 
-	public static void logoutViaToken(String token, String url) {
+	public static void logoutViaToken(String token) {
 
 		String username = Cache.get(PREFIX + token, String.class);
 		Cache.delete(PREFIX + token);
@@ -57,6 +67,13 @@ public class SessionTransfer extends Controller {
 		} else {
 			forbidden();
 		}
+		
+		String url = flash.get("url");
+		if (url == null) {
+			url = "/";
+		}
+
+		redirect(url);
 
 		redirect(url);
 
