@@ -23,20 +23,51 @@
     clickAndWait('submit')   
     
     //expect that error is shown
-    assertTextPresent('Error')  
+    assertTextPresent('Error.')  
     
-    //now we are entering a correct email and it should work:
+    //now we are entering a correct email - BUT we do not click the TOS checkbox
     type('email', 'test@test.com')
     type('password', 'test')
     type('confirm', 'test')
     clickAndWait('submit')
     
+    //expect that error is shown => accept terms of service
+    assertTextPresent('Must be checked')  
+    
+    
+    //now we are entering two different passwords
+    type('email', 'test@test.com')
+    type('password', 'PASSWORD')
+    type('confirm', 'WRONGPASSWORD')
+    check('acceptTermsOfService')
+    clickAndWait('submit')
+    
+    assertTextPresent('Error.') 
+    
+    
+    //now we are entering a correct email and check tos 
+    //BUT NOW: the password is toooo short...
+    type('email', 'test@test.com')
+    type('password', 'test')
+    type('confirm', 'test')
+    check('acceptTermsOfService')
+    clickAndWait('submit')
+    
+    assertTextPresent('Minimum size is 8') 
+    
+    
+    //now we are entering a correct email and check tos => everythings okay...
+    type('email', 'test@test.com')
+    type('password', 'the_correct_password')
+    type('confirm', 'the_correct_password')
+    check('acceptTermsOfService')
+    clickAndWait('submit')
     
     //check that email was sent to test@test.com
     storeLastReceivedEmailBy('test@test.com', 'email')
     store('javascript{/http:[^\s]+/.exec(storedVars["email"])[0]}', 'confirmationUrl')
     open($[confirmationUrl])
-    assertTextPresent('Registration successful :)')  
+    assertTextPresent('Registration successful')  
        
     //Oops. Now the user lost the password.
     clearSession()
@@ -48,6 +79,19 @@
     storeLastReceivedEmailBy('test@test.com', 'email')
     store('javascript{/http:[^\s]+/.exec(storedVars["email"])[0]}', 'confirmationUrl')
     
+
+    
+    
+    //cool. open the link url => BUT PW is too short...
+    open($[confirmationUrl])
+    //and enter a new password
+    type('password', 'shortpw')
+    type('passwordConfirm', 'shortpw')
+    clickAndWait('submit')
+    
+    //and check that there is success setting the pw :)
+    assertTextPresent('Minimum size is 8')
+
     //cool. open the link url
     open($[confirmationUrl])
     //and enter a new password
@@ -55,9 +99,7 @@
     type('passwordConfirm', 'newpassword')
     clickAndWait('submit')
     
-    //and check that there is success setting the pw :)
     assertTextPresent('jupp')
-
     
     //and now log in with new password:
     clearSession()
