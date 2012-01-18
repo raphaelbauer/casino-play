@@ -10,6 +10,7 @@ import casino.RegistrationMailer;
 
 import play.Play;
 import play.data.validation.Email;
+import play.data.validation.IsTrue;
 import play.data.validation.Required;
 import ugot.recaptcha.Recaptcha;
 
@@ -29,13 +30,15 @@ public class Registration extends TransportUriGuarantee {
 	/**
 	 * Do the validation of the registration screen
 	 */
-	public static void registrationFinish(@Recaptcha String captcha,
-			@Required @Email String email, @Required String password,
-			@Required String confirm) {
+	public static void registrationFinish(
+			@Recaptcha String captcha,
+			@Required @Email String email, 
+			@Required String password,
+			@Required String confirm,
+			@IsTrue Boolean acceptTermsOfService) {
 
 		// check that form is really from user:
 		checkAuthenticity();
-		
 		
 		boolean hasErrors = true;
 
@@ -74,6 +77,14 @@ public class Registration extends TransportUriGuarantee {
 			flash.error("registration.error");
 			validation.keep();
 			params.flash("email");
+			
+			//If acceptTermsOfService is not checked it is not sent to server..
+			//therefore we check for null...
+			if (acceptTermsOfService != null) {
+				params.flash("acceptTermsOfService");
+			}
+			
+
 			registration();
 
 		} else {

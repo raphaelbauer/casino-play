@@ -3,6 +3,7 @@ registration.register_title=Register
 registration.email=Email
 registration.password=Password
 registration.confirm=Password
+registration.acceptTermsOfService=Accept Terms of Service
 registration.register=Go!
 
 # Signup success => check email
