@@ -29,8 +29,7 @@
             <input type="password" name="confirm" id="confirm" />
             #{ifError 'confirm'}<span class="error">#{error 'confirm' /}</span>#{/ifError}
         </li>
-        <li>
-            
+        <li>           
             <input type="checkbox" name="acceptTermsOfService" id="acceptTermsOfService" value="true" ${flash.acceptTermsOfService ? 'checked':''}/>&{'registration.acceptTermsOfService'}             
             #{ifError 'acceptTermsOfService'}<span class="error">#{error 'acceptTermsOfService' /}</span>#{/ifError}<br/>
         </li>

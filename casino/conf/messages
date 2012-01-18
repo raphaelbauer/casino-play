@@ -15,7 +15,7 @@ registration.confirmation.body=Please click on link to confirm your registration
 
 # Signup confirm email
 registration.error=Error.
-registration.registration_success=Registration successful :)
+registration.registration_success=Registration successful. You are logged in now and can use the application. Have fun :)
 
 # Password recovery
 # login page

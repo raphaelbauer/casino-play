@@ -6,13 +6,14 @@ import models.casino.User;
 
 import org.apache.commons.codec.binary.Base64;
 
-import casino.RegistrationMailer;
-
 import play.Play;
 import play.data.validation.Email;
+import play.data.validation.Equals;
 import play.data.validation.IsTrue;
+import play.data.validation.MinSize;
 import play.data.validation.Required;
 import ugot.recaptcha.Recaptcha;
+import casino.RegistrationMailer;
 
 public class Registration extends TransportUriGuarantee {
 
@@ -33,8 +34,8 @@ public class Registration extends TransportUriGuarantee {
 	public static void registrationFinish(
 			@Recaptcha String captcha,
 			@Required @Email String email, 
-			@Required String password,
-			@Required String confirm,
+			@Required @Equals("confirm") @MinSize(8) String password,
+			@Required @MinSize(8) String confirm,
 			@IsTrue Boolean acceptTermsOfService) {
 
 		// check that form is really from user:
@@ -126,6 +127,9 @@ public class Registration extends TransportUriGuarantee {
 			// remove pending reg
 			user.confirmationCode = "";
 			user.save();
+			
+			//we also log in user after successful confirmation of email...
+			session.put("username", user.email);
 
 			flash.success("registration.registration_success");
 		} else {
@@ -232,15 +236,15 @@ public class Registration extends TransportUriGuarantee {
 		
 	}
 	
-	
+
 	/**
 	 * Validation for the lostPasswordNewPassword screen
 	 */
 	public static void lostPasswordNewPasswordFinish(
 			@Required String code,
 			@Recaptcha String captcha,
-			@Required String password,
-			@Required String passwordConfirm) {
+			@Required @Equals("passwordConfirm") @MinSize(8) String password,
+			@Required @MinSize(8) String passwordConfirm) {
 		
 
 		// check:
@@ -271,7 +275,7 @@ public class Registration extends TransportUriGuarantee {
 			
 			flash.error("registration.error");
 			params.flash("password");
-			params.flash("passwordConfirmation");
+			params.flash("passwordConfirm");
 			validation.keep();
 			lostPasswordNewPassword(code);
 
@@ -279,7 +283,6 @@ public class Registration extends TransportUriGuarantee {
 						
 			User user = User.all().filter("recoverPasswordCode", code).get();
 			if (user == null) {
-				System.out.println("user is null... not saving password...");
 				// hmm. does not exist. display success anyway...
 				// we don't want to let robots sniff...
 				render();
@@ -288,7 +291,6 @@ public class Registration extends TransportUriGuarantee {
 				
 				user.recoverPasswordCode = "";
 				user.setPasswordHash(password);
-				System.out.println("saved password");
 				user.save();
 				
 				render();				
