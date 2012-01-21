@@ -1,0 +1,5 @@
+self: play -> casinojpa 1.1
+
+require:
+    - play -> play
+    - play -> casino 1.1
