@@ -9,6 +9,7 @@ import siena.Generator;
 import siena.Id;
 import siena.embed.Embedded;
 import casino.BCrypt;
+import casino.Casino;
 
 public class User extends EnhancedModel {
 
@@ -37,7 +38,24 @@ public class User extends EnhancedModel {
 	@Embedded
 	private List<String> roles;
 	
-	
+	/**
+	 * Constructor will be removed soon.
+	 * 
+	 * We do no longer manage passwords inside our User object.
+	 * 
+	 * @param email
+	 * @param password
+	 */
+	@Deprecated
+	public User(String email, String password) {
+		
+		this.email = email;
+		this.pwHash = Casino.getHashForPassword(password);
+		this.confirmationCode = Casino.shortUUID();
+
+		this.roles = new ArrayList<String>();
+		
+	}
 
 	public User(String email, String passwordHash, String confirmationCode) {
 
