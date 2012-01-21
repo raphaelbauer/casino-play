@@ -37,12 +37,14 @@ public class Casino {
 
 		if (casinoUserManagerString == null) {
 
-			throw new ConfigurationException("Please specify "
+			throw new ConfigurationException(
+					"[Casino] Expect definition of "
 					+ CasinoApplicationConfConstants.CASINO_USER_MANAGER
-					+ " in application.conf\n" + " for instance: "
+					+ " in application.conf\n" 
+					+ "e.g.: "
 					+ CasinoApplicationConfConstants.CASINO_USER_MANAGER + "="
-					+ CASINO_USER_MODEL_MANAGER_JPA);
-
+					+ CASINO_USER_MODEL_MANAGER_JPA 
+					+ "\nOr did you maybe forget casinojpa-x.x or casinosiena-x.x in your dependencies.yml?");
 		}
 
 		try {
