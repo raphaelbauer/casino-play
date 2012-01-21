@@ -3,5 +3,7 @@
 require:
     - play
     - play -> casino 1.1
+    - play -> casinojpa 1.1
+    - play -> casinosiena 1.1
     - play -> crudsiena 2.0.2
     - play -> siena 2.0.7
