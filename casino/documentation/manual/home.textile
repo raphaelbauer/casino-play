@@ -119,8 +119,8 @@ h2. Develop
 h3. Next possible todos
 
 * Time based invalidation for confirmation codes in User model
-* maybe different User.java (docs, empty fields not intuitive?)
-* OAuth integration => facebook login / google login 
+* OAuth integration => facebook login / google login  (module securesocial?)
+* Deadbolt integration?
 
 
 h3. Setup and develop
