@@ -29,7 +29,7 @@ h3. Basic configuration (uses siena mapper by default)
 ** casino.emailFrom=YOUR_EMAIL@test.com
 ** ugot.recaptcha.privateKey=YOUR RECAPTCHA KEY
 ** ugot.recaptcha.publicKey=YOUR RECAPTCHA KEY
-** §more on recaptcha keys":http://www.wikipedia.orghttp://www.playframework.org/modules/recaptcha-1.2/home
+** ¬ßmore on recaptcha keys":http://www.wikipedia.orghttp://www.playframework.org/modules/recaptcha-1.2/home
 
 Please check out also the test configuration at https://github.com/reyez/casino-play/blob/master/casino-test/conf/application.conf
 
@@ -130,6 +130,19 @@ h3. Setup and develop
     * ln -s mycheckoutdirectory/casino-play/casino casino-0.x (x is the version you want to reference)
 * run "play deps --sync" and "play ec" in both casino and casino-test
 * run "play auto-test" in casino-test - the result should be "All tests passed"
+
+~ 7 tests to run:
+~
+~ models/casino/UserTest...                           PASSED     0s
+~ ApplicationTest...                                  PASSED     1s
+~ controllers/casino/AfterUserCreationHookTest...     PASSED     0s
+~ controllers/casino/BaseFunctionalTest...            PASSED     0s
+~ controllers/casino/Helper...                        PASSED     0s
+~ controllers/casino/SecurityCasinoTest...            PASSED     1s
+~ RegistrationLifecycle...                            PASSED     11s
+~
+~ All tests passed
+
 * import projects into eclipse if you wish
 
 ... Happy coding :)
