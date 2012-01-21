@@ -1,15 +1,27 @@
-Changelog
-==============
+h1. Changelog
 
-1.0 (latest)
------------
+h2. 1.1 (latest)
+
+* optional possibility to use any ORM you like by configuring casino.user in application.conf
+* optional possibility to use a hook, executed after user is created
+* fully backwards compatible to 1.0
+* a lot more documentation
+* testcases for JPA and Siena
+* testcases for AfterUserCreationHook
+* bump to latest recaptcha dependency 1.3
+* bump to latest siena dependency 2.0.7
+* bump to latest play dependency 1.2.4
+
+
+h2. 1.0
+
 * name change to Casino
 * move to github
-* change of file names to "Casino" prefix (CasioSecurity, CasinoSecure...)
+* submission to play modules listing
 
 
-0.4
------------
+h2. 0.4
+
 * cleaner integration with Play secure => still doublication of Secure.java and Check.java. Not nice.
 * support for authorizing (thus setting play session cookies) user across domain boundaries
 ** routes login/auth_with_token?token=XYZ logout/auth_with_token?token=XYZ
@@ -18,9 +30,8 @@ Changelog
 ** Methods hasRole, addRole
 ** @Check("role:admin") (or any role you use) supported on controller level
 
-0.3:
-Description
------------
+h2. 0.3
+
 * support for fixing url for login/login/registration
 ** example: make sure login runs over https://example.com and NOT over http://example.com
 ** done via parameter

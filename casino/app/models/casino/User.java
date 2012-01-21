@@ -9,7 +9,7 @@ import siena.Generator;
 import siena.Id;
 import siena.embed.Embedded;
 import casino.BCrypt;
-import controllers.casino.Registration;
+import casino.Casino;
 
 public class User extends EnhancedModel {
 
@@ -38,24 +38,35 @@ public class User extends EnhancedModel {
 	@Embedded
 	private List<String> roles;
 	
-	
-
+	/**
+	 * Constructor will be removed soon.
+	 * 
+	 * We do no longer manage passwords inside our User object.
+	 * 
+	 * @param email
+	 * @param password
+	 */
+	@Deprecated
 	public User(String email, String password) {
-
-		if (email == null || email.isEmpty())
-			throw new RuntimeException("User must have an email");
-		if (password == null || email.isEmpty())
-			throw new RuntimeException("User must have a password");
-		this.email = email;
-		int saltFactor = Integer.parseInt(play.Play.configuration.getProperty(
-				"registration.salt_factor", "10"));
 		
-		this.pwHash = BCrypt.hashpw(password, BCrypt.gensalt(saltFactor));
-		this.confirmationCode = Registration.shortUUID();
+		this.email = email;
+		this.pwHash = Casino.getHashForPassword(password);
+		this.confirmationCode = Casino.shortUUID();
+
+		this.roles = new ArrayList<String>();
+		
+	}
+
+	public User(String email, String passwordHash, String confirmationCode) {
+
+		this.email = email;
+		this.pwHash = passwordHash;
+		this.confirmationCode = confirmationCode;
 
 		this.roles = new ArrayList<String>();
 	}
 
+	@Deprecated
 	public void setPasswordHash(String password) {
 
 		int saltFactor = Integer.parseInt(play.Play.configuration.getProperty(
@@ -64,6 +75,7 @@ public class User extends EnhancedModel {
 
 	}
 
+	@Deprecated
 	public boolean isThisCorrectUserPassword(String plainTextPassword) {
 
 		return BCrypt.checkpw(plainTextPassword, pwHash);
@@ -108,5 +120,7 @@ public class User extends EnhancedModel {
 		return roles;
 		
 	}
+
+
 
 }

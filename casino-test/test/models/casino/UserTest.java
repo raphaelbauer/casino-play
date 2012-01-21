@@ -1,11 +1,10 @@
 package models.casino;
-import models.casino.User;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import play.modules.siena.SienaFixtures;
 import play.test.UnitTest;
+import casino.Casino;
 
 
 public class UserTest extends UnitTest {
@@ -21,7 +20,10 @@ public class UserTest extends UnitTest {
 	@Test
 	public void testUserModel() {
 		
-		User user = new User("me@email.com", "mysecretpassword");
+		String hash = Casino.getHashForPassword("password");
+		
+		User user = new User("me@email.com", hash, "CODE");
+		
 		
 		assertTrue(user.email.equals("me@email.com"));
 		

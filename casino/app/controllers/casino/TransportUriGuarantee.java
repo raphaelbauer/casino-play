@@ -4,6 +4,7 @@ import play.Play;
 import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.Util;
+import casino.CasinoApplicationConfConstants;
 
 public class TransportUriGuarantee extends Controller {
 
@@ -28,7 +29,7 @@ public class TransportUriGuarantee extends Controller {
 	public static void redirectIfNecessary() {
 		
 		String secureUrl = Play.configuration.getProperty(
-				CasinoConstants.secureUrl, "");
+				CasinoApplicationConfConstants.SECURE_URL, "");
 
 		
 		//is the parameter set in application.conf?

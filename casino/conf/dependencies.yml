@@ -1,6 +1,6 @@
-self: play -> casino 1.0
+self: play -> casino 1.1
 
 require:
     - play -> play
-    - play -> siena 2.0.6
-    - play -> recaptcha 1.2
+    - play -> siena 2.0.7
+    - play -> recaptcha 1.3
