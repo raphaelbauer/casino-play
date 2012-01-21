@@ -9,22 +9,21 @@ import play.exceptions.ConfigurationException;
 
 public class Casino {
 
-	public static final String CASINO_USER_MODEL = "casino.user";
+	public static final String CASINO_USER_MODEL_SIENA = "models.casino.SienaUserManager";
 
-	public static final String CASINO_USER_MODEL_SIENA = "models.casino.UserManager";
+	public static final String CASINO_USER_MODEL_JPA = "models.casino.jpa.JpaUserManager";
 
 	private static CasinoUserManager CASINO_USER;
-	
-	
+
 	public static final String CASINO_BCYPT_SALT_FACTOR = "casino.bcrypt_salt_factor";
-	
+
 	public static final String CASINO_BCYPT_SALT_FACTOR_DEFAULT = "10";
 
 	static {
 
 		// using siena model by default...
 		String casinoUserModelString = Play.configuration.getProperty(
-				CASINO_USER_MODEL, CASINO_USER_MODEL_SIENA);
+				CasinoApplicationConfConstants.CASINO_USER_MANAGER, CASINO_USER_MODEL_JPA);
 
 		try {
 			Class<CasinoUserManager> clazz = (Class<CasinoUserManager>) Class
@@ -38,39 +37,60 @@ public class Casino {
 					e.getMessage()));
 		}
 	}
-	
-	
-	public static CasinoUserManager getCasinoUser() {
-		
+
+	public static CasinoUserManager getCasinoUserManager() {
+
 		return CASINO_USER;
-		
+
 	}
-	
-	
+
 	public static String getHashForPassword(String password) {
-		
+
 		int saltFactor = Integer.parseInt(play.Play.configuration.getProperty(
 				CASINO_BCYPT_SALT_FACTOR, CASINO_BCYPT_SALT_FACTOR_DEFAULT));
-		
+
 		return BCrypt.hashpw(password, BCrypt.gensalt(saltFactor));
-		
-		
+
 	}
-	
-	public static boolean doPasswordAndHashMatch(String password, String passwordHash) {
-		
+
+	public static boolean doPasswordAndHashMatch(String password,
+			String passwordHash) {
+
 		return BCrypt.checkpw(password, passwordHash);
-		
+
 	}
-	
-	
-	
-	
-	
-	
-	//////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * called right after a user is executed...
+	 */
+	public static void executeAfterUserCreationHook(String email) {
+
+		// using siena model by default...
+		String casinoUserModelString = Play.configuration
+				.getProperty(CasinoApplicationConfConstants.AFTER_CREATION_HOOK);
+
+		if (casinoUserModelString != null) {
+
+			try {
+				Class<AfterUserCreationHook> clazz = (Class<AfterUserCreationHook>) Class
+						.forName(casinoUserModelString);
+
+				AfterUserCreationHook afterUserCreationHook = clazz.newInstance();
+				afterUserCreationHook.execute(email);
+
+			} catch (Exception e) {
+				throw new ConfigurationException(String.format(
+						"Unable to create CasinoUser instance: [%s]",
+						e.getMessage()));
+			}
+
+		}
+
+	}
+
+	// ////////////////////////////////////////////////////////////////////////
 	// Additional stuff:
-	//////////////////////////////////////////////////////////////////////////
+	// ////////////////////////////////////////////////////////////////////////
 	private static byte[] asByteArray(UUID uuid) {
 		long msb = uuid.getMostSignificantBits();
 		long lsb = uuid.getLeastSignificantBits();
@@ -89,6 +109,5 @@ public class Casino {
 		UUID uuid = UUID.randomUUID();
 		return Base64.encodeBase64URLSafeString(asByteArray(uuid));
 	}
-	
 
 }

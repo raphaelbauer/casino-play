@@ -56,7 +56,7 @@ public class Registration extends TransportUriGuarantee {
 		// check if user exists and don't allow to register user:
 		if (!hasErrors) {
 
-			if (Casino.getCasinoUser().doesUserExist(email)) {
+			if (Casino.getCasinoUserManager().doesUserExist(email)) {
 				hasErrors = true;
 
 			}
@@ -82,8 +82,10 @@ public class Registration extends TransportUriGuarantee {
 			String passwordHash = Casino.getHashForPassword(password);
 			String confirmationCode = Casino.shortUUID();
 
-			Casino.getCasinoUser().createNewCasinoUser(email, passwordHash,
+			Casino.getCasinoUserManager().createNewCasinoUser(email, passwordHash,
 					confirmationCode);
+						
+			Casino.executeAfterUserCreationHook(email);
 
 			RegistrationMailer.confirmation(email, confirmationCode);
 			pending();
@@ -113,12 +115,12 @@ public class Registration extends TransportUriGuarantee {
 
 		// get user with this email
 
-		String email = Casino.getCasinoUser()
+		String email = Casino.getCasinoUserManager()
 				.getCasinoUserWithConfirmationCode(code);
 
 		if (email != null) {
 
-			Casino.getCasinoUser().deleteConfirmationCodeOfCasioUser(email);
+			Casino.getCasinoUserManager().deleteConfirmationCodeOfCasioUser(email);
 
 			// we also log in user after successful confirmation of email...
 			session.put("username", email);
@@ -185,13 +187,13 @@ public class Registration extends TransportUriGuarantee {
 			// check if user exists and send email
 			// always display success message...
 
-			if (Casino.getCasinoUser().doesUserExist(email)) {
+			if (Casino.getCasinoUserManager().doesUserExist(email)) {
 				// user found.. displaying notification.
 				// send notification
 
 				String recoverPasswordCode = Casino.shortUUID();
 				
-				Casino.getCasinoUser().setRecoveryPasswordCode(email, recoverPasswordCode);
+				Casino.getCasinoUserManager().setRecoveryPasswordCode(email, recoverPasswordCode);
 
 				RegistrationMailer.lostPassword(email, recoverPasswordCode);
 
@@ -269,7 +271,7 @@ public class Registration extends TransportUriGuarantee {
 
 		} else {
 
-			String email = Casino.getCasinoUser()
+			String email = Casino.getCasinoUserManager()
 					.getCasinoUserWithRecoveryPasswordCode(code);
 
 			if (email == null) {
@@ -281,12 +283,12 @@ public class Registration extends TransportUriGuarantee {
 
 			} else {
 
-				Casino.getCasinoUser().setRecoveryPasswordCode(email, code);
+				Casino.getCasinoUserManager().setRecoveryPasswordCode(email, code);
 
 				// compute hash...
 				String passwordHash = Casino.getHashForPassword(password);
 
-				Casino.getCasinoUser().setNewPasswordHashForUser(email,
+				Casino.getCasinoUserManager().setNewPasswordHashForUser(email,
 						passwordHash);
 
 				render();

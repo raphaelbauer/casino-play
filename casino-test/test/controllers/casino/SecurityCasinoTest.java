@@ -18,7 +18,7 @@ public class SecurityCasinoTest extends BaseFunctionalTest {
 		
 		String passwordHash = Casino.getHashForPassword(password);
 		
-		Casino.getCasinoUser().createNewCasinoUser(email, passwordHash, "");
+		Casino.getCasinoUserManager().createNewCasinoUser(email, passwordHash, "");
 
 		
 		//check that access is forbidden when no role:
@@ -29,9 +29,9 @@ public class SecurityCasinoTest extends BaseFunctionalTest {
 		assertStatus(302, response);
 		
 		//add role "admin"
-		Casino.getCasinoUser().addRole(email, "admin");
+		Casino.getCasinoUserManager().addRole(email, "admin");
 		
-		assertTrue(Casino.getCasinoUser().hasRole(email, "admin"));
+		assertTrue(Casino.getCasinoUserManager().hasRole(email, "admin"));
 
 		
 		clearCookies();
@@ -50,7 +50,7 @@ public class SecurityCasinoTest extends BaseFunctionalTest {
 		
 		
 		//add role "superadmin"
-		Casino.getCasinoUser().addRole(email, "superadmin");
+		Casino.getCasinoUserManager().addRole(email, "superadmin");
 		
 		//check access again
 		response = GET("/secure/admin_only");
@@ -61,7 +61,7 @@ public class SecurityCasinoTest extends BaseFunctionalTest {
 		
 		
 		//and remove role "superadmin"
-		Casino.getCasinoUser().removeRole(email, "superadmin");
+		Casino.getCasinoUserManager().removeRole(email, "superadmin");
 
 		
 		//check access again

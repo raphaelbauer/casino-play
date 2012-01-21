@@ -15,5 +15,12 @@ public interface CasinoApplicationConfConstants {
 	
 	/* optional in application conf */
 	public static String REGULAR_URL = "casino.regularUrl";
+	
+	/**
+	 * must implement AfterUserCreationHook interface...
+	 */
+	public static String AFTER_CREATION_HOOK = "casino.afterUserCreationHook";
+	
+	public static final String CASINO_USER_MANAGER = "casino.userManager";
 
 }

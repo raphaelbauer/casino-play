@@ -37,13 +37,13 @@ public class Security extends Secure.Security {
     	 */
     	public static boolean authenticate(String username, String password) {
 
-    		if (!Casino.getCasinoUser().isUserActivated(username)) {
+    		if (!Casino.getCasinoUserManager().isUserActivated(username)) {
     			
     			return false;
     			
     		}
     		
-    		String passwordHash = Casino.getCasinoUser().getUserPasswordHash(username);
+    		String passwordHash = Casino.getCasinoUserManager().getUserPasswordHash(username);
     		
     		
     		return Casino.doPasswordAndHashMatch(password, passwordHash);
@@ -92,7 +92,7 @@ public class Security extends Secure.Security {
         			//now check if user is in that role and return result...  
         			
         			
-        			boolean boole = Casino.getCasinoUser().hasRole(email, role);
+        			boolean boole = Casino.getCasinoUserManager().hasRole(email, role);
         			System.out.println("checking role: " + role + " - " + boole);
          			return boole;
         			

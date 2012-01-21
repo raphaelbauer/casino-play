@@ -2,6 +2,6 @@ package casino;
 
 public interface AfterUserCreationHook {
 	
-	public void userJustCreated();
+	public void execute(String email);
 
 }

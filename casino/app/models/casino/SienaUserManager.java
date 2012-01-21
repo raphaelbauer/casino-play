@@ -3,7 +3,7 @@ package models.casino;
 import casino.Casino;
 import casino.CasinoUserManager;
 
-public class UserManager implements CasinoUserManager {
+public class SienaUserManager implements CasinoUserManager {
 
 	@Override
 	public void createNewCasinoUser(String email, String passwordHash,
@@ -49,6 +49,12 @@ public class UserManager implements CasinoUserManager {
 	public void addRole(String email, String role) {
 
 		User user = User.all().filter("email", email).get();
+		
+		if (user == null) {
+			return;
+		}
+		
+		
 		user.addRole(role);
 		user.save();
 
@@ -59,10 +65,14 @@ public class UserManager implements CasinoUserManager {
 
 		User user = User.all().filter("email", email).get();
 
-		if (user != null) {
+		if (user == null) {
+			return;
+		}
+		
+
 			user.removeRole(role);
 			user.save();
-		}
+		
 	}
 
 	@Override
@@ -71,8 +81,9 @@ public class UserManager implements CasinoUserManager {
 
 		User user = User.all().filter("email", email).get();
 
-		if (user == null)
+		if (user == null) {
 			return;
+		}
 
 		user.recoverPasswordCode = recoveryPasswordCode;
 		user.save();
@@ -85,8 +96,9 @@ public class UserManager implements CasinoUserManager {
 		User user = User.all().filter("confirmationCode", confirmationCode)
 				.get();
 
-		if (user == null)
+		if (user == null) {
 			return null;
+		}
 
 		return user.email;
 
@@ -97,6 +109,10 @@ public class UserManager implements CasinoUserManager {
 
 		User user = User.all().filter("email", email).get();
 
+		if (user == null) {
+			return;
+		}
+		
 		user.confirmationCode = "";
 		user.save();
 
@@ -107,8 +123,9 @@ public class UserManager implements CasinoUserManager {
 
 		User user = User.all().filter("email", email).get();
 
-		if (user == null)
+		if (user == null) {
 			return null;
+		}
 
 		return user.pwHash;
 	}
@@ -118,8 +135,9 @@ public class UserManager implements CasinoUserManager {
 
 		User user = User.all().filter("email", email).get();
 
-		if (user == null)
+		if (user == null) {
 			return;
+		}
 
 		user.pwHash = passwordHash;
 
