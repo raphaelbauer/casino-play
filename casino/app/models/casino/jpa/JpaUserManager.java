@@ -10,11 +10,22 @@ import casino.CasinoUserManager;
 public class JpaUserManager implements CasinoUserManager {
 
 	@Override
-	public void createNewCasinoUser(String email, String passwordHash,
+	public boolean createNewCasinoUser(String email, String passwordHash,
 			String confirmationCode) {
 
-		User user = new User(email, passwordHash, confirmationCode);
+		User user = getOneUserWithEmail(email);
+		
+		if (user != null) {
+			
+			return false;
+		}
+		
+		
+		
+		user = new User(email, passwordHash, confirmationCode);
 		user.save();
+		
+		return true;
 
 	}
 

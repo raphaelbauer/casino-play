@@ -21,8 +21,10 @@ public interface CasinoUserManager {
 	 * @param email
 	 * @param passwordHash
 	 * @param confirmationCode
+	 * 
+	 * @return true if created / false if not (user exists or so...)
 	 */
-	public void createNewCasinoUser(String email, String passwordHash,
+	public boolean createNewCasinoUser(String email, String passwordHash,
 			String confirmationCode);
 
 	// /////////////////////////////////////////////////////////////////////////

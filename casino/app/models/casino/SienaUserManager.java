@@ -6,11 +6,19 @@ import casino.CasinoUserManager;
 public class SienaUserManager implements CasinoUserManager {
 
 	@Override
-	public void createNewCasinoUser(String email, String passwordHash,
+	public boolean createNewCasinoUser(String email, String passwordHash,
 			String confirmationCode) {
 
-		User user = new User(email, passwordHash, confirmationCode);
+		User user = User.all().filter("email", email).get();
+		
+		if (user != null) {
+			return false;
+		}
+
+		user = new User(email, passwordHash, confirmationCode);
 		user.save();
+		
+		return true;
 
 	}
 
@@ -49,12 +57,11 @@ public class SienaUserManager implements CasinoUserManager {
 	public void addRole(String email, String role) {
 
 		User user = User.all().filter("email", email).get();
-		
+
 		if (user == null) {
 			return;
 		}
-		
-		
+
 		user.addRole(role);
 		user.save();
 
@@ -68,11 +75,10 @@ public class SienaUserManager implements CasinoUserManager {
 		if (user == null) {
 			return;
 		}
-		
 
-			user.removeRole(role);
-			user.save();
-		
+		user.removeRole(role);
+		user.save();
+
 	}
 
 	@Override
@@ -112,7 +118,7 @@ public class SienaUserManager implements CasinoUserManager {
 		if (user == null) {
 			return;
 		}
-		
+
 		user.confirmationCode = "";
 		user.save();
 

@@ -9,11 +9,11 @@ import play.exceptions.ConfigurationException;
 
 public class Casino {
 
-	public static final String CASINO_USER_MODEL_SIENA = "models.casino.SienaUserManager";
+	public static final String CASINO_USER_MODEL_MANAGER_SIENA = "models.casino.SienaUserManager";
 
-	public static final String CASINO_USER_MODEL_JPA = "models.casino.jpa.JpaUserManager";
+	public static final String CASINO_USER_MODEL_MANAGER_JPA = "models.casino.jpa.JpaUserManager";
 
-	private static CasinoUserManager CASINO_USER;
+	private static CasinoUserManager CASINO_USER_MANAGER;
 
 	public static final String CASINO_BCYPT_SALT_FACTOR = "casino.bcrypt_salt_factor";
 
@@ -22,20 +22,21 @@ public class Casino {
 	static {
 
 		// using siena model by default...
-		String casinoUserModelString = Play.configuration.getProperty(
+		String casinoUserManagerString = Play.configuration.getProperty(
 				CasinoApplicationConfConstants.CASINO_USER_MANAGER,
-				CASINO_USER_MODEL_JPA);
+				CASINO_USER_MODEL_MANAGER_JPA);
 
 		try {
 			Class<CasinoUserManager> clazz = (Class<CasinoUserManager>) Class
-					.forName(casinoUserModelString);
+					.forName(casinoUserManagerString);
 
-			CASINO_USER = clazz.newInstance();
+			CASINO_USER_MANAGER = clazz.newInstance();
 
 		} catch (Exception e) {
-			throw new ConfigurationException(String.format(
-					"Unable to create CasinoUser instance: [%s]",
-					e.getMessage()));
+			throw new ConfigurationException(
+					String.format(
+							"Unable to create CasinoUserManager from application.conf: [%s]",
+							e.getMessage()));
 		}
 	}
 
@@ -61,23 +62,28 @@ public class Casino {
 	public static void executeAfterUserCreationHook(String email) {
 
 		// using siena model by default...
-		String casinoUserModelString = Play.configuration
+		String afterCreationHookString = Play.configuration
 				.getProperty(CasinoApplicationConfConstants.AFTER_CREATION_HOOK);
 
-		if (casinoUserModelString != null) {
+		if (afterCreationHookString != null) {
 
-			try {
-				Class<AfterUserCreationHook> clazz = (Class<AfterUserCreationHook>) Class
-						.forName(casinoUserModelString);
+			if (!afterCreationHookString.equals("")) {
 
-				AfterUserCreationHook afterUserCreationHook = clazz
-						.newInstance();
-				afterUserCreationHook.execute(email);
+				try {
 
-			} catch (Exception e) {
-				throw new ConfigurationException(String.format(
-						"Unable to create CasinoUser instance: [%s]",
-						e.getMessage()));
+					Class<AfterUserCreationHook> clazz = (Class<AfterUserCreationHook>) Class
+							.forName(afterCreationHookString);
+
+					AfterUserCreationHook afterUserCreationHook = clazz
+							.newInstance();
+					afterUserCreationHook.execute(email);
+
+				} catch (Exception e) {
+					throw new ConfigurationException(
+							String.format(
+									"Unable to create AfterCreationHook from application.conf: [%s]",
+									e.getMessage()));
+				}
 			}
 
 		}
@@ -110,67 +116,75 @@ public class Casino {
 	// convenience methods.
 	// create new user also calles hook if there is one
 	// /////////////////////////////////////////////////////////////////////////
-	public static void createNewCasinoUser(String email, String passwordHash,
-			String confirmationCode) {
+	public static boolean createNewCasinoUser(String email,
+			String passwordHash, String confirmationCode) {
 
-		CASINO_USER.createNewCasinoUser(email, passwordHash, confirmationCode);
+		boolean userCreated = CASINO_USER_MANAGER.createNewCasinoUser(email,
+				passwordHash, confirmationCode);
 
-		// and execute hook...
-		executeAfterUserCreationHook(email);
+		// only exdc if user has been created...
+		if (userCreated) {
+			// and execute hook...
+			executeAfterUserCreationHook(email);
+		}
+
+		return userCreated;
 
 	}
 
 	public static boolean isUserActivated(String email) {
-		return CASINO_USER.isUserActivated(email);
+		return CASINO_USER_MANAGER.isUserActivated(email);
 	}
 
 	public static boolean doesUserExist(String email) {
-		return CASINO_USER.doesUserExist(email);
+		return CASINO_USER_MANAGER.doesUserExist(email);
 	}
 
 	public static String getUserPasswordHash(String email) {
-		return CASINO_USER.getUserPasswordHash(email);
+		return CASINO_USER_MANAGER.getUserPasswordHash(email);
 	}
 
 	public static void setNewPasswordHashForUser(String email,
 			String passwordHash) {
-		CASINO_USER.setNewPasswordHashForUser(email, passwordHash);
+		CASINO_USER_MANAGER.setNewPasswordHashForUser(email, passwordHash);
 
 	}
 
 	public static boolean hasRole(String email, String role) {
-		return CASINO_USER.hasRole(email, role);
+		return CASINO_USER_MANAGER.hasRole(email, role);
 	}
 
 	public static void addRole(String email, String role) {
-		CASINO_USER.addRole(email, role);
+		CASINO_USER_MANAGER.addRole(email, role);
 	}
 
 	public static void removeRole(String email, String role) {
-		CASINO_USER.removeRole(email, role);
+		CASINO_USER_MANAGER.removeRole(email, role);
 
 	}
 
 	public static String getCasinoUserWithRecoveryPasswordCode(
 			String recoverPasswordCode) {
-		return CASINO_USER
+		return CASINO_USER_MANAGER
 				.getCasinoUserWithRecoveryPasswordCode(recoverPasswordCode);
 	}
 
 	public static void setRecoveryPasswordCode(String email,
 			String recoveryPasswordCode) {
 
-		CASINO_USER.setRecoveryPasswordCode(email, recoveryPasswordCode);
+		CASINO_USER_MANAGER
+				.setRecoveryPasswordCode(email, recoveryPasswordCode);
 
 	}
 
 	public static String getCasinoUserWithConfirmationCode(
 			String confirmationCode) {
-		return CASINO_USER.getCasinoUserWithConfirmationCode(confirmationCode);
+		return CASINO_USER_MANAGER
+				.getCasinoUserWithConfirmationCode(confirmationCode);
 	}
 
 	public static void deleteConfirmationCodeOfCasioUser(String email) {
-		CASINO_USER.deleteConfirmationCodeOfCasioUser(email);
+		CASINO_USER_MANAGER.deleteConfirmationCodeOfCasioUser(email);
 
 	}
 
