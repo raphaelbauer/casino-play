@@ -1,0 +1,6 @@
+self: play -> casinosiena 1.1
+
+require:
+    - play -> play
+    - play -> siena 2.0.7
+    - play -> casino 1.1   
