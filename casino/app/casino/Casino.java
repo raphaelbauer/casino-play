@@ -23,7 +23,8 @@ public class Casino {
 
 		// using siena model by default...
 		String casinoUserModelString = Play.configuration.getProperty(
-				CasinoApplicationConfConstants.CASINO_USER_MANAGER, CASINO_USER_MODEL_JPA);
+				CasinoApplicationConfConstants.CASINO_USER_MANAGER,
+				CASINO_USER_MODEL_JPA);
 
 		try {
 			Class<CasinoUserManager> clazz = (Class<CasinoUserManager>) Class
@@ -36,12 +37,6 @@ public class Casino {
 					"Unable to create CasinoUser instance: [%s]",
 					e.getMessage()));
 		}
-	}
-
-	public static CasinoUserManager getCasinoUserManager() {
-
-		return CASINO_USER;
-
 	}
 
 	public static String getHashForPassword(String password) {
@@ -75,7 +70,8 @@ public class Casino {
 				Class<AfterUserCreationHook> clazz = (Class<AfterUserCreationHook>) Class
 						.forName(casinoUserModelString);
 
-				AfterUserCreationHook afterUserCreationHook = clazz.newInstance();
+				AfterUserCreationHook afterUserCreationHook = clazz
+						.newInstance();
 				afterUserCreationHook.execute(email);
 
 			} catch (Exception e) {
@@ -108,6 +104,74 @@ public class Casino {
 	public static String shortUUID() {
 		UUID uuid = UUID.randomUUID();
 		return Base64.encodeBase64URLSafeString(asByteArray(uuid));
+	}
+
+	// /////////////////////////////////////////////////////////////////////////
+	// convenience methods.
+	// create new user also calles hook if there is one
+	// /////////////////////////////////////////////////////////////////////////
+	public static void createNewCasinoUser(String email, String passwordHash,
+			String confirmationCode) {
+
+		CASINO_USER.createNewCasinoUser(email, passwordHash, confirmationCode);
+
+		// and execute hook...
+		executeAfterUserCreationHook(email);
+
+	}
+
+	public static boolean isUserActivated(String email) {
+		return CASINO_USER.isUserActivated(email);
+	}
+
+	public static boolean doesUserExist(String email) {
+		return CASINO_USER.doesUserExist(email);
+	}
+
+	public static String getUserPasswordHash(String email) {
+		return CASINO_USER.getUserPasswordHash(email);
+	}
+
+	public static void setNewPasswordHashForUser(String email,
+			String passwordHash) {
+		CASINO_USER.setNewPasswordHashForUser(email, passwordHash);
+
+	}
+
+	public static boolean hasRole(String email, String role) {
+		return CASINO_USER.hasRole(email, role);
+	}
+
+	public static void addRole(String email, String role) {
+		CASINO_USER.addRole(email, role);
+	}
+
+	public static void removeRole(String email, String role) {
+		CASINO_USER.removeRole(email, role);
+
+	}
+
+	public static String getCasinoUserWithRecoveryPasswordCode(
+			String recoverPasswordCode) {
+		return CASINO_USER
+				.getCasinoUserWithRecoveryPasswordCode(recoverPasswordCode);
+	}
+
+	public static void setRecoveryPasswordCode(String email,
+			String recoveryPasswordCode) {
+
+		CASINO_USER.setRecoveryPasswordCode(email, recoveryPasswordCode);
+
+	}
+
+	public static String getCasinoUserWithConfirmationCode(
+			String confirmationCode) {
+		return CASINO_USER.getCasinoUserWithConfirmationCode(confirmationCode);
+	}
+
+	public static void deleteConfirmationCodeOfCasioUser(String email) {
+		CASINO_USER.deleteConfirmationCodeOfCasioUser(email);
+
 	}
 
 }
