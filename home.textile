@@ -1,0 +1,156 @@
+!https://github.com/reyez/casino-play/blob/master/casino-logo.png?raw=true(Casino Logo)!
+
+h1. Casino! - user management for Play! framework
+
+This project provides a simple method to integrate user registration and password recovery to your project.
+The cool thing is that it is based on play's security concept. So we don't re-invent the wheel 
+but simply add some stuff.
+
+h2. Features
+
+* Signup / Registration of new users
+* Sending of signup email for email verification
+* Password recovery when user lost password
+* Views fully customizable
+* ReCaptcha protection against bots
+* Login via different url (eg. login / registration via https, rest of app handled via http)
+* Simple management of arbitrary roles
+* AfterUserCreationHook => do something when a user has been created in your db
+* Built-in Support for Siena ORM and JPA
+* Built-in user model can be deactivated and own user model with any ORM you like can be used
+
+
+h2. Getting started
+
+h3. Basic configuration (uses siena mapper by default)
+
+* Add - play -> casino-xx to your dependencies.yml
+* Add the following properties to your application conf:
+** casino.emailFrom=YOUR_EMAIL@test.com
+** ugot.recaptcha.privateKey=YOUR RECAPTCHA KEY
+** ugot.recaptcha.publicKey=YOUR RECAPTCHA KEY
+** §more on recaptcha keys":http://www.wikipedia.orghttp://www.playframework.org/modules/recaptcha-1.2/home
+
+Please check out also the test configuration at https://github.com/reyez/casino-play/blob/master/casino-test/conf/application.conf
+
+h3. Basic routes
+
+I would recommend checking out the source of casino-test. If you run the application using play test you can examine everything.
+
+Basic routes provided for end user:
+
+* /login
+* /logout
+* /registration
+* /registration/lostpassword
+
+h2. Advanced configuration
+
+h3. Using Siena ORM
+
+Siena is the default option and is configured out of the box.
+
+h3. Using JPA
+
+Simply set the following two parameters in application.conf:
+
+* siena.jpa.disable=false
+* casino.userManager=models.casino.jpa.JpaUserManager
+
+
+h3. Custom views
+
+Most likely you'll find Casino!'s views nasty and not fitting your nicely crafted ui design. We know that :) And in
+fact you can and should implement your own views and email message templates. Simply copy the directory
+structure of app/views/casino and style them the way you want.
+
+
+h3. Two different urls for http / https - aka secure login
+
+Transmitting passwords should ALWAYS go to https. Regular traffic to your website not necessarily. Casino!
+supports sending your password to a secure url and redirecting to the regular http. Casino! signs both
+urls with the play! cookie. So your app runs on both urls.
+
+This is for instance needed on Google AppEngne. https is server off https://myapp.appspot.com, but regularily you
+want the user being able to use http://www.myapp.com. Using Casino! you can simply specify
+* casino.regularUrl=http://www.myapp.com
+* casino.secureUrl=https://myapp.appspot.com
+And you are done. Both urls are signed with by Casino! with Play!'s session cookie and the user logged in.
+
+
+h3. AfterUserCreationHook
+
+If you use the standard User models distributed by Casino! you are getting all you need: Password management for a user, role management and more.
+But sometimes you need more. Generate a Settings Entity right after a user is executed for instance.
+
+The way to accomplish this in Casino! is simple:
+* Implement a class in your project that inherits casino.AfterUserCreationHook
+* Implement method execute(String email) - this method will be called right after a user is created in your database.
+* in your application.conf file specify a new parameter casino.afterUserCreationHook and specify the class you just created
+**  casino.afterUserCreationHook=myapplication.MySpecialAfterUserCreationHook
+
+h3. Your own User model
+
+You can use your own way of handling user management. You'll still profit of all basic functions Casino! provides: password hashing, all views responsible for signup and password recovery.
+The only thing you have to do is implementing your own CasinoUserManager. 
+
+* Implement a class in your project that inherits casino.CasinoUserManager
+* Implement all methods.
+* in your application.conf file specify a new parameter casino.userManager and specify the class you just created
+
+And that's it.
+
+
+h2. More getting started
+
+* General lifecycle: https://github.com/reyez/casino-play/blob/master/casino-test/test/RegistrationLifecycle.test.html
+* General configuration: https://github.com/reyez/casino-play/blob/master/casino-test/conf
+
+
+h2. Implementation details
+
+* Uses siena for persistence of the user object 
+* Uses bcrypt to hash password (should be safe in the next years)
+* Uses re-captcha to block bots from using your stuff
+* complete selenium usecase is at casino-test/test/!RegistrationLifecycle.html
+
+h2. Develop 
+
+h3. Next possible todos
+
+* Time based invalidation for confirmation codes in User model
+* OAuth integration => facebook login / google login  (module securesocial?)
+* Deadbolt integration?
+
+
+h3. Setup and develop
+
+* clone sources from github
+* generate a link to casino from your play/modules directory:
+    * ln -s mycheckoutdirectory/casino-play/casino casino-0.x (x is the version you want to reference)
+* run "play deps --sync" and "play ec" in both casino and casino-test
+* run "play auto-test" in casino-test - the result should be "All tests passed"
+* import projects into eclipse if you wish
+
+... Happy coding :)
+
+h2. Test
+
+* Test project is under casino-test
+* Run tests via "play test" or "play auto-test"
+
+h2. Release
+
+* play build-module
+* Use /dist/casino-0.X.zip for distribution :)
+
+h2. Friends on the road
+
+* https://github.com/steve918/play-registration (got a lot ideas what to do from there thanks!)
+* http://www.grails.org/plugin/gsec
+* http://www.playframework.org/modules/recaptcha-1.2/home
+* https://github.com/mandubian/play-siena
+* http://playframwork.org
+* http://sienaproject.com/
+
+"Supported by FinalFrontierLabs":[http://finalfrontierlabs.com
