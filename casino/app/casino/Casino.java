@@ -20,6 +20,16 @@ public class Casino {
 	public static final String CASINO_BCYPT_SALT_FACTOR_DEFAULT = "10";
 
 	static {
+		initCasino();
+	}
+
+	/**
+	 * Normally called automatically from inside a static block.
+	 * 
+	 * Loads and inits CasinoUserManager
+	 * 
+	 */
+	public static void initCasino() {
 
 		// using siena model by default...
 		String casinoUserManagerString = Play.configuration.getProperty(
@@ -38,6 +48,7 @@ public class Casino {
 							"Unable to create CasinoUserManager from application.conf: [%s]",
 							e.getMessage()));
 		}
+
 	}
 
 	public static String getHashForPassword(String password) {
