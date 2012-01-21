@@ -1,9 +1,8 @@
 import org.junit.Test;
 
-import controllers.casino.BaseFunctionalTest;
-
 import play.Play;
 import play.mvc.Http.Response;
+import controllers.casino.BaseFunctionalTest;
 
 public class ApplicationTest extends BaseFunctionalTest {
 

@@ -1,4 +1,4 @@
-&{'registration.confirmation.greeting'} ${recipient}!
+&{'registration.confirmation.greeting'} ${email}!
 
 &{'registration.confirmation.body'}
 

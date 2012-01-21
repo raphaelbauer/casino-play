@@ -3,28 +3,25 @@ package casino;
 import java.util.HashMap;
 import java.util.Map;
 
-import models.casino.User;
 import play.Play;
 import play.mvc.Mailer;
 import play.mvc.Router;
-import controllers.casino.CasinoConstants;
-import controllers.casino.Registration;
 
 public class RegistrationMailer extends Mailer {
 
-	public static void confirmation(User user) {
+	public static void confirmation(String email, String confirmationCode) {
 
 		Map<String, Object> args = new HashMap<String, Object>();
-		args.put("code", user.confirmationCode);
+		args.put("code", confirmationCode);
 		String confirmation_link = Router.getFullUrl("casino.Registration.confirm",
 				args);
 		setSubject("Registration Confirmation");
 
-		String recipient = user.email;
-		addRecipient(recipient);
+
+		addRecipient(email);
 
 		String emailFrom = Play.configuration.getProperty(
-				CasinoConstants.emailFrom, "");
+				CasinoApplicationConfConstants.EMAIL_FROM, "");
 
 		if (emailFrom.equals("")) {
 
@@ -34,27 +31,27 @@ public class RegistrationMailer extends Mailer {
 
 			setFrom(emailFrom);
 
-			send("casino/Registration/confirmation", recipient, confirmation_link);
+			send("casino/Registration/confirmation", email, confirmation_link);
 		}
 
 	}
 
-	public static void lostPassword(User user) {
+	public static void lostPassword(String email, String recoverPasswordCode) {
 
-		user.recoverPasswordCode = Registration.shortUUID();
-		user.save();
+		//user.recoverPasswordCode = Registration.shortUUID();
+		//user.save();
 
 		Map<String, Object> args = new HashMap<String, Object>();
-		args.put("code", user.recoverPasswordCode);
+		args.put("code", recoverPasswordCode);
 		String confirmation_link = Router.getFullUrl(
 				"casino.Registration.lostPasswordNewPassword", args);
 		setSubject("Recover Password");
 
-		String recipient = user.email;
-		addRecipient(recipient);
+		
+		addRecipient(email);
 
 		String emailFrom = Play.configuration.getProperty(
-				CasinoConstants.emailFrom, "");
+				CasinoApplicationConfConstants.EMAIL_FROM, "");
 
 		if (emailFrom.equals("")) {
 
@@ -64,7 +61,7 @@ public class RegistrationMailer extends Mailer {
 
 			setFrom(emailFrom);
 
-			send("casino/Registration/lostPasswordEmail", recipient,
+			send("casino/Registration/lostPasswordEmail", email,
 					confirmation_link);
 		}
 	}

@@ -1,18 +1,10 @@
 package controllers.casino;
 
-import java.util.List;
-
-import models.casino.User;
-
 import org.junit.Test;
 
-import controllers.Users;
-
-import play.Play;
 import play.cache.Cache;
-import play.modules.siena.SienaFixtures;
 import play.mvc.Http.Response;
-import play.test.Fixtures;
+import casino.Casino;
 
 public class SecurityCasinoTest extends BaseFunctionalTest {
 
@@ -20,14 +12,14 @@ public class SecurityCasinoTest extends BaseFunctionalTest {
 	@Test
 	public void testCheckMethod() {
 		
+		String email = "user@me.com";
+		
+		String password = "password";
+		
+		String passwordHash = Casino.getHashForPassword(password);
+		
+		Casino.getCasinoUser().createNewCasinoUser(email, passwordHash, "");
 
-		
-		User user = new User("user@me.com", "secret_password");
-		user.confirmationCode = "";
-		user.save();
-		
-		List<User> users = User.all().fetch();
-		System.out.println("num of users: " + users.size());
 		
 		//check that access is forbidden when no role:
 		Response response = GET("/secure/admin_only");
@@ -37,24 +29,15 @@ public class SecurityCasinoTest extends BaseFunctionalTest {
 		assertStatus(302, response);
 		
 		//add role "admin"
-		user.addRole("admin");
-		user.save();
+		Casino.getCasinoUser().addRole(email, "admin");
 		
-		
-		users = User.all().fetch();
-		System.out.println("num of users: " + users.size());
-		for (User user1 : users) {
-			
-			System.out.println("user: " + user1.email);
-			System.out.println("user has role admin: " + user1.hasRole("admin"));
-			
-		}
-		
+		assertTrue(Casino.getCasinoUser().hasRole(email, "admin"));
+
 		
 		clearCookies();
 		Cache.clear();
 		//and login...
-		Helper.doLogin("user@me.com", "secret_password");
+		Helper.doLogin(email, password);
 		
 		//check access again
 		response = GET("/secure/admin_only");
@@ -67,8 +50,7 @@ public class SecurityCasinoTest extends BaseFunctionalTest {
 		
 		
 		//add role "superadmin"
-		user.addRole("superadmin");
-		user.save();
+		Casino.getCasinoUser().addRole(email, "superadmin");
 		
 		//check access again
 		response = GET("/secure/admin_only");
@@ -79,8 +61,8 @@ public class SecurityCasinoTest extends BaseFunctionalTest {
 		
 		
 		//and remove role "superadmin"
-		user.removeRole("superadmin");
-		user.save();
+		Casino.getCasinoUser().removeRole(email, "superadmin");
+
 		
 		//check access again
 		response = GET("/secure/admin_only");

@@ -1,11 +1,17 @@
 Changelog
 ==============
+1.1 (latest)
+------------
+* optional possibility to use any ORM you like by configuring casino.user in application.conf
+* optional possibility to use a hook, executed after user is created
+* fully backwards compatible to 1.0
 
-1.0 (latest)
+
+1.0
 -----------
 * name change to Casino
 * move to github
-* change of file names to "Casino" prefix (CasioSecurity, CasinoSecure...)
+* submission to play modules listing
 
 
 0.4

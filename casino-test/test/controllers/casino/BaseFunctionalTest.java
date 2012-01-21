@@ -8,6 +8,7 @@ import play.cache.Cache;
 import play.modules.siena.SienaFixtures;
 import play.test.Fixtures;
 import play.test.FunctionalTest;
+import casino.CasinoApplicationConfConstants;
 
 public class BaseFunctionalTest extends FunctionalTest {
 
@@ -21,8 +22,8 @@ public class BaseFunctionalTest extends FunctionalTest {
 		clearCookies();
 		Cache.clear();
 
-		Play.configuration.setProperty(CasinoConstants.secureUrl, "");
-		Play.configuration.setProperty(CasinoConstants.regularUrl, "");
+		Play.configuration.setProperty(CasinoApplicationConfConstants.SECURE_URL, "");
+		Play.configuration.setProperty(CasinoApplicationConfConstants.REGULAR_URL, "");
 
 	}
 

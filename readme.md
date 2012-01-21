@@ -4,21 +4,20 @@
 
 ## Description
 
-Play is a great framework but currently lacks a simple user sign-up and password recovery process.
-
-This project provides a simple method to integrate sign-up and password recovery to your project.
-The cool thing is that it is based on play's security concept. So we don't re-invent the wheel but simply add some stuff.
+This project provides a simple method to integrate user registration and password recovery to your project.
+The cool thing is that it is based on play's security concept. So we don't re-invent the wheel 
+but simply add some stuff.
 
 
 ## Features
 * Signup / Registration of new users
-* Sending of Signup email for email verification
+* Sending of signup email for email verification
 * ReCaptcha protection against bots
 * Password recovery
-* Login via different url (eg. login / registration via https, rest of app handleded via http)
+* Login via different url (eg. login / registration via https, rest of app handled via http)
 * Simple management of arbitrary roles
 * Support for Siena ORM (planned support for other ORMs).
-
+* AfterUserCreationHook => do something when a user has been created in your db.
 
 # Getting started
 * Add - play -> casino-xx to your dependencies.yml
@@ -26,7 +25,7 @@ The cool thing is that it is based on play's security concept. So we don't re-in
     * ugot.recaptcha.privateKey=YOUR RECAPTCHA KEY
     * ugot.recaptcha.publicKey=YOUR RECAPTCHA KEY
     * more on recaptcha keys: http://www.playframework.org/modules/recaptcha-1.2/home
-    * casino.emailFrom=YOUR EMAIL@test.com 
+    * casino.emailFrom=YOUR_EMAIL@test.com 
     * (optional) casino.regularUrl=https://www.example.com (to fix regular url, eg your http url) 
     * (optional) casino.secureUrl=https://www.example.com (to fix secure url, eg your https url)
 * check out test config at: https://github.com/reyez/casino-play/blob/master/casino-test/conf/application.conf

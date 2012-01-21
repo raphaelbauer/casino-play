@@ -4,9 +4,10 @@ package controllers.casino;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import models.casino.User;
 import play.Play;
 import play.utils.Java;
+import casino.Casino;
+import casino.CasinoApplicationConfConstants;
 
 /**
  * A more or less exact copy of the secure implementation of play.
@@ -36,23 +37,16 @@ public class Security extends Secure.Security {
     	 */
     	public static boolean authenticate(String username, String password) {
 
-    		
-    		User user = User.all().filter("email", username).get();
-    		
-    		
-    		//the email should be there
-    		if (user == null) {
+    		if (!Casino.getCasinoUser().isUserActivated(username)) {
+    			
     			return false;
+    			
     		}
     		
-    		//make sure the user confirmed the name
-    		if (user.confirmationCode.length() != 0) {
-    			return false;
-    		}
+    		String passwordHash = Casino.getCasinoUser().getUserPasswordHash(username);
     		
     		
-
-    		return user.isThisCorrectUserPassword(password);
+    		return Casino.doPasswordAndHashMatch(password, passwordHash);
 
     	}
 
@@ -89,20 +83,18 @@ public class Security extends Secure.Security {
         			return false;
         		}
         		
-        		User user = User.all().filter("email", email).get();
-        		//if user does not exist role checking does not make sense...
-        		if (user == null) {
-        			return false;
-        		}
-        		
         		String [] splittedStuff = check.split(":");
         		
         		if (splittedStuff.length > 1) {
         			
         			String role = splittedStuff[1];
         			
-        			//now check if user is in that role and return result...       			
-         			return user.hasRole(role);
+        			//now check if user is in that role and return result...  
+        			
+        			
+        			boolean boole = Casino.getCasinoUser().hasRole(email, role);
+        			System.out.println("checking role: " + role + " - " + boole);
+         			return boole;
         			
         		}
         		
@@ -134,15 +126,15 @@ public class Security extends Secure.Security {
         static void onAuthenticated() {
         	
         	
-        	String secureUrl = Play.configuration.getProperty(CasinoConstants.secureUrl, "");
+        	String secureUrl = Play.configuration.getProperty(CasinoApplicationConfConstants.SECURE_URL, "");
         	
         	//only do stuff if we have two domains:
         	if (!secureUrl.equals("")) {
         		
-        		String regularUrl = Play.configuration.getProperty(CasinoConstants.regularUrl, "");
+        		String regularUrl = Play.configuration.getProperty(CasinoApplicationConfConstants.REGULAR_URL, "");
         		
         		if (regularUrl.equals("")) {
-        			throw new RuntimeException("Error. Please set " + CasinoConstants.regularUrl + " AND " + CasinoConstants.secureUrl + " in application.conf.");
+        			throw new RuntimeException("Error. Please set " + CasinoApplicationConfConstants.REGULAR_URL + " AND " + CasinoApplicationConfConstants.SECURE_URL + " in application.conf.");
         		}
         		
         		String url = flash.get("url");
@@ -166,7 +158,7 @@ public class Security extends Secure.Security {
          */
         static void onDisconnect() {
             
-        	String secureUrl = Play.configuration.getProperty(CasinoConstants.secureUrl, "");
+        	String secureUrl = Play.configuration.getProperty(CasinoApplicationConfConstants.SECURE_URL, "");
         	
         	//save username so we can inform the other server (if there is one)
         	String username = session.get("username");
@@ -178,10 +170,10 @@ public class Security extends Secure.Security {
         	//only do stuff if we have two domains:
         	if (!secureUrl.equals("")) {
         		
-        		String regularUrl = Play.configuration.getProperty(CasinoConstants.regularUrl, "");
+        		String regularUrl = Play.configuration.getProperty(CasinoApplicationConfConstants.REGULAR_URL, "");
         		
         		if (regularUrl.equals("")) {
-        			throw new RuntimeException("Error. Please set " + CasinoConstants.regularUrl + " AND " + CasinoConstants.secureUrl + " in application.conf.");
+        			throw new RuntimeException("Error. Please set " + CasinoApplicationConfConstants.REGULAR_URL + " AND " + CasinoApplicationConfConstants.SECURE_URL + " in application.conf.");
         		}
         		
         		String url = flash.get("url");
