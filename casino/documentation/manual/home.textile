@@ -15,7 +15,7 @@ h2. Features
 * ReCaptcha protection against bots
 * Login via different url (eg. login / registration via https, rest of app handled via http)
 * Simple management of arbitrary roles
-* AfterUserCreationHook => do something when a user has been created in your db
+* AfterUserCreationHook => do something when a user has been created
 * Built-in Support for Siena ORM (dependency casinosiena) and JPA (module casinojpa)
 * Own user model with any ORM you like can be used
 * Integrated bcrypt support for password hashing
@@ -54,8 +54,7 @@ h2. Advanced configuration
 
 h3. Custom views
 
-Most likely you'll find Casino!'s views nasty and not fitting your nicely crafted ui design. We know that :) And in
-fact you can and should implement your own views and email message templates. Simply copy the directory
+Most likely you'll find Casino!'s views nasty and not fitting your nicely crafted ui design. We know that :) And you can and should implement your own views and email message templates. Simply copy the directory
 structure of app/views/casino and style them the way you want.
 
 
@@ -121,7 +120,11 @@ h3. Setup and develop
 
 * clone sources from github
 * generate a link to casino from your play/modules directory:
-    * ln -s mycheckoutdirectory/casino-play/casino casino-0.x (x is the version you want to reference)
+    * ln -s mycheckoutdirectory/casino-play/casino casino-1.x (x is the version you want to reference)
+* generate a link to casinojpa from your play/modules directory:
+    * ln -s mycheckoutdirectory/casino-play/casinojpa casino-1.x (x is the version you want to reference)
+* generate a link to casinosiena from your play/modules directory:
+    * ln -s mycheckoutdirectory/casino-play/casinosiena casino-1.x (x is the version you want to reference)
 * run "play deps --sync" and "play ec" in both casino and casino-test
 * run "play auto-test" in casino-test - the result should be "All tests passed"
 
@@ -160,4 +163,4 @@ h2. Friends on the road
 * http://playframwork.org
 * http://sienaproject.com/
 
-"Supported by FinalFrontierLabs":[http://finalfrontierlabs.com]
+"Supported by FinalFrontierLabs":http://finalfrontierlabs.com
