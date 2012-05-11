@@ -281,7 +281,7 @@ public class Registration extends TransportUriGuarantee {
 
 			} else {
 
-				Casino.setRecoveryPasswordCode(email, code);
+				Casino.setRecoveryPasswordCode(email, null);
 
 				// compute hash...
 				String passwordHash = Casino.getHashForPassword(password);
